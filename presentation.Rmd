@@ -1,0 +1,89 @@
+---
+title: "outward-facing"
+author: "Yuli Jin"
+date: "2021/10/7"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,eval=TRUE,highlight=FALSE,warning=F,message = F)
+knitr::opts_chunk$set(fig.width=10, fig.height=6,fig.align = "center") 
+pacman::p_load("tidyverse","printr")
+
+```
+
+## Story
+
+I'm interested in the difference between the co2 emissions tonnes per person and region or income condition. Generally, it is believed that the income is related with co2 emissions in that further economy and development incrsease at the cost of co2 emissions. Also, areas like African generate less co2 compared with developed areas. Therefore, I select co2 emission in 2018 in G77 and choose these countries' income condition and lacation as comparisons to check if my assumptions are correct.
+
+## Tidy Data
+
+There is the head of the tidy data. For more information about wrangling step, please see wrangling_code.R and pdf file.
+
+```{r}
+# overview: This chunk sources two r scripts, gets the data and presents the tidy data 
+
+source(file = "wrangling_code.R", echo = FALSE) #source the wrangling code scripts
+source(file = "visualization_function.R", echo = FALSE) #source the visualization scripts
+data=get_data() #get the data in wrangling code
+select(data,-(income_groups:world_6region))%>%head() # it is asked to present tidy data
+```
+
+## Observation
+
+In this section, I mainly discuss what I have seen within two subgroups of my data. dplyr::group_by() and dplyr::summarise() are adopted in the following table.
+
+### Income groups
+
+First, let's take a look into income_groups. Obviously, high_income regions have higher co2 emission. For high_income countries, the mean of co2 emission is 13.4. For upper_middle_income, the mean of co2 is reduced into 3.63. For the lower_middle_income and the low_income, the mean of co2 emission is 1.23 and 0.29 respectively. The boxplot is made by visualization_function. From the plot, there is a drastic difference between high income countries and the rest of the country. Also, the variance of high income is high.
+
+```{r}
+# overview: This chunk shows the mean and median of co2 emission in different income groups
+
+result1<-data%>%group_by(income_groups)%>%summarise(mean=mean(co2_emissions_tonnes_per_person)%>%round(2),
+                                                         median=median(co2_emissions_tonnes_per_person)%>%round(2))
+#grouby income groups calculate mean and median
+knitr::kable(result1, "simple") #present the table
+```
+
+```{r}
+# overview: this chunk uses the visualization script and plots the graph
+
+p2<-vf(input=data,xv=data$income_groups,yv=data$co2_emissions_tonnes_per_person,cv=data$income_groups)
+#use vf function in visualization script to plot boxplot
+p2
+```
+
+
+### World 6 Region
+
+Next, I group by world 6 region and summarise the mean and median. From the table below, the mean of co2 emission in Saharan Africa and South Asia is extremely low. The co2 emissions in America and East Asia Pacific are similar and these two area are in the middle level. Europe Central Asia and Middle East North Africa rank top among 6 regions.
+
+```{r}
+# overview: This chunk shows the mean and median of co2 emission in world 6 region
+
+result2<-data%>%group_by(world_6region)%>%summarise(mean=mean(co2_emissions_tonnes_per_person)%>%round(2),
+                                                         median=median(co2_emissions_tonnes_per_person)%>%round(2))
+#groupby world 6 region calculate mean and median
+knitr::kable(result2, "simple") #present the table
+
+```
+
+
+```{r}
+# overview: this chunk uses the visualization script and plots the graph
+
+p1<-vf(input=data,xv=data$world_6region,yv=data$co2_emissions_tonnes_per_person,cv=data$world_6region)
+#use vf function in visualization script to plot boxplot
+p1
+```
+
+## Summary
+
+In this work, I follow the direction in assignment2. I adopt groupby and summarise to get two subgroups and make some interesting observations in both groups. Additionaly, two comparative graphs are presented.
+
+
+
+
+
+
