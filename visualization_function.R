@@ -21,8 +21,6 @@ p <- ggplot(input, aes(x=xv,y=yv,color=cv)) + geom_point()+
   labs(y='co2_emissions_tonnes_per_person') +
   scale_colour_discrete(name=NULL)+theme_bw()
 
-# changes
-
 
 
 
