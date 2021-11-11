@@ -11,6 +11,15 @@ vf<-function(input,xv,yv,cv){
   return(p)
 }
 
+## SUPPLEMENT COMMENTS:
+# the visualization  file is not readable on it's own. Works only when combined in the presentation
+# data is not sourced
+
+library(ggplot2)
+
+p <- ggplot(input, aes(x=xv,y=yv,color=cv)) + geom_point()+
+  labs(y='co2_emissions_tonnes_per_person') +
+  scale_colour_discrete(name=NULL)+theme_bw()
 
 
 
